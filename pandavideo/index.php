@@ -2,7 +2,7 @@
 /**
  * Plugin name:     Panda Video
  * Author:          Panda Video
- * Version:   		1.4.1
+ * Version:   		1.5.0
  * Author URI:      https://www.pandavideo.com/
  * Description:     Plug & Play of Panda Videos' player.
  * Text Domain: 	pandavideo

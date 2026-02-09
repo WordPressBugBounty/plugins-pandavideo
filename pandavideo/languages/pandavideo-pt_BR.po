@@ -141,6 +141,14 @@ msgstr "Controles"
 msgid "Controls color"
 msgstr "Cor dos controles"
 
+#: includes/widgets/Player.php:167
+msgid "Current / Total"
+msgstr "Atual / Total"
+
+#: includes/widgets/Player.php:168
+msgid "Current Time"
+msgstr "Tempo Atual"
+
 #: includes/widgets/PandaButton.php:161
 msgid "Current tab"
 msgstr "Aba atual"
@@ -208,6 +216,10 @@ msgstr "Altura (px)"
 #: includes/widgets/Player.php:405
 msgid "Hide controls before the play"
 msgstr "Ocultar controles antes da reprodução"
+
+#: includes/widgets/Player.php:170
+msgid "Hide Time"
+msgstr "Ocultar Tempo"
 
 #. Author URI of the plugin
 msgid "https://www.pandavideo.com/"
@@ -321,6 +333,10 @@ msgstr "Progresso"
 msgid "Reduce speed at % of the video"
 msgstr "Reduzir a velocidade em % do vídeo"
 
+#: includes/widgets/Player.php:169
+msgid "Remaining Time"
+msgstr "Tempo Restante"
+
 #: includes/widgets/Player.php:498
 msgid "Report bug"
 msgstr "Relatar bug"
@@ -418,6 +434,10 @@ msgstr "Há um ou mais plugins que precisam ser instalados."
 #: includes/widgets/Player.php:490
 msgid "Thumbnail in the end of video"
 msgstr "Thumbnail no fim do vídeo"
+
+#: includes/widgets/Player.php:163
+msgid "Time display"
+msgstr "Exibição do tempo"
 
 #: includes/widgets/Player.php:234
 msgid "Title"

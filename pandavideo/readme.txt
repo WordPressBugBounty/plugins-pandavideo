@@ -4,7 +4,7 @@ Tags: video, panda, panda video
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tested up to: 6.5.5
-Stable tag: 1.4.1
+Stable tag: 1.5.0
 Requires PHP: 7.0
 
 Plug & play Panda Video's player.

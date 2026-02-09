@@ -34,7 +34,8 @@ class PandaVideo_Player extends \Elementor\Widget_Base
 		'alternativeProgressHeight',
 		'disablePause',
 		'bigPlayButtonSize',
-		'bigPlayButtonIconSize'
+		'bigPlayButtonIconSize',
+		'timeDisplayType'
 	];
 
 	private $available_controls = [
@@ -156,6 +157,23 @@ class PandaVideo_Player extends \Elementor\Widget_Base
 				]
 			);
 			$this->create_switcher( 'player_control-current-time', 'Current Time', true );
+			$this->add_control(
+				'timeDisplayType',
+				[
+					'label' => __( 'Time display', 'pandavideo' ),
+					'type' => \Elementor\Controls_Manager::SELECT,
+					'default' => 'CURRENT_TOTAL_TIME',
+					'options' => [
+						'CURRENT_TOTAL_TIME' => __( 'Current / Total', 'pandavideo' ),
+						'CURRENT_TIME' => __( 'Current Time', 'pandavideo' ),
+						'REMAINING_TIME' => __( 'Remaining Time', 'pandavideo' ),
+						'HIDE_TIME' => __( 'Hide Time', 'pandavideo' ),
+					],
+					'condition' => [
+						'player_control-current-time' => 'yes'
+					]
+				]
+			);
 			$this->create_switcher( 'player_control-volume', __( 'Volume', 'pandavideo' ), true );
 			$this->add_control(
 				'player_control-progress',
@@ -848,8 +866,14 @@ class PandaVideo_Player extends \Elementor\Widget_Base
 			$video_library = explode("library_id: '", $external_link)[1];
 			$video_library = explode("'", $video_library)[0];
 			$external_link = "https://player-$video_library.tv.pandavideo.com.br/embed/?v=$video_id";
+		} else if (is_numeric(strpos($external_link, '.m3u8.live'))) {
+			$library = explode('.tv.', explode('://b-', $external_link)[1])[0];
+			$video_id = explode('/playlist.m3u8', explode('.com.br/', $external_link)[1])[0];
+			$external_link = "https://player-$library.tv.pandavideo.com.br/embed/?v=$video_id&isLive=true";
 		}
 
+		$is_live = is_numeric(strpos($external_link, 'isLive=true'));
+		$is_staging = is_numeric(strpos($external_link, '.stg.'));
 		$is_external_video = property_exists($external_video, 'html');
 		if (strpos($external_link, 'pandavideo.com')) {
 			$player_config_json = $this->apply_appearance($settings);
@@ -866,9 +890,77 @@ class PandaVideo_Player extends \Elementor\Widget_Base
 			<?php
 				if ($is_external_video) {
 					echo "<div class=\"external-video-container\">".wp_kses_post($external_video->html)."</div>";
+				} else if ($is_live || $is_staging) {
+				$live_params = [];
+
+				if (!empty($settings['color'])) {
+					$live_params['primaryColor'] = $settings['color'];
+				}
+				if (!empty($settings['controlsColor'])) {
+					$live_params['controlsColor'] = $settings['controlsColor'];
+				}
+
+				$live_controls = [];
+				foreach ($this->available_controls as $ctrl) {
+					if (isset($settings["player_control-$ctrl"]) && $settings["player_control-$ctrl"] === 'yes') {
+						$live_controls[] = $ctrl;
+					}
+				}
+				if (!empty($live_controls)) {
+					$live_params['controls'] = implode(',', $live_controls);
+				}
+
+				if (isset($settings['autoplay']) && $settings['autoplay'] === 'yes') {
+					$live_params['autoplay'] = 'true';
+					if (isset($settings['smartAutoplay']) && $settings['smartAutoplay'] === 'yes') {
+						$live_params['smartAutoplay'] = 'true';
+					}
+				}
+
+				if (isset($settings['pandaBranding']) && $settings['pandaBranding'] !== 'yes') {
+					$live_params['pandaBranding'] = 'false';
+				}
+
+				if (isset($settings['hideControlsOnStart']) && $settings['hideControlsOnStart'] === 'yes') {
+					$live_params['hideControlsOnStart'] = 'true';
+				}
+
+				if (isset($settings['mutedIndicatorIcon']) && $settings['mutedIndicatorIcon'] === 'yes') {
+					$live_params['mutedIndicatorIcon'] = 'true';
+					if (!empty($settings['mutedIndicatorAnimation'])) {
+						$live_params['mutedIndicatorAnimation'] = $settings['mutedIndicatorAnimation'];
+					}
+					if (!empty($settings['mutedIndicatorTextTop'])) {
+						$live_params['mutedIndicatorTextTop'] = $settings['mutedIndicatorTextTop'];
+					}
+					if (!empty($settings['mutedIndicatorTextBottom'])) {
+						$live_params['mutedIndicatorTextBottom'] = $settings['mutedIndicatorTextBottom'];
+					}
+					if (!empty($settings['mutedIndicatorTextColor'])) {
+						$live_params['mutedIndicatorTextColor'] = $settings['mutedIndicatorTextColor'];
+					}
+					if (!empty($settings['mutedIndicatorBackgroundColor'])) {
+						$live_params['mutedIndicatorBackgroundColor'] = $settings['mutedIndicatorBackgroundColor'];
+					}
+				}
+
+				if (!empty($live_params)) {
+					$separator = is_numeric(strpos($external_link, '?')) ? '&' : '?';
+					$external_link .= $separator . http_build_query($live_params);
+				}
+			?>
+			<div id="<?php echo esc_attr($id) ?>" style="position: relative; padding-top: 56.25%;">
+				<iframe
+					src="<?php echo esc_url($external_link) ?>"
+					style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+					allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+					allowfullscreen
+				></iframe>
+			</div>
+			<?php
 				} else {
 			?>
-			
+
 			<div id="<?php echo esc_attr($id) ?>">
 				<p class="there-is-content">&nbsp;</p>
 				<div style="position: relative; padding-top: 56.25%;"></div>
@@ -887,7 +979,8 @@ class PandaVideo_Player extends \Elementor\Widget_Base
 						</div>
 					<?php
 				}
-			?> 
+			?>
+			<?php if (!$is_live && !$is_staging) { ?>
 			<script>
 				/* nowprocket */
 				var isEditingElementor = undefined;
@@ -970,7 +1063,13 @@ class PandaVideo_Player extends \Elementor\Widget_Base
 						playerConfigs<?php echo esc_html($id) ?>.preload = false;
 					<?php
 				} ?>
-				
+
+				<?php if ($is_live) {
+					?>
+						playerConfigs<?php echo esc_html($id) ?>.isLive = true;
+					<?php
+				} ?>
+
 				function getAspectRatio(height, width) {
 					let ratio = height / width;
 
@@ -1223,6 +1322,7 @@ class PandaVideo_Player extends \Elementor\Widget_Base
 					});
 				}
 			</script>
+			<?php } ?>
 			<style>
 				.e-con.e-flex > .e-con-inner:has(iframe[id^="panda-"]) {
 					flex-wrap: nowrap;

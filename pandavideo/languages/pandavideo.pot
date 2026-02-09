@@ -142,6 +142,14 @@ msgstr ""
 msgid "Controls color"
 msgstr ""
 
+#: includes/widgets/Player.php:167
+msgid "Current / Total"
+msgstr ""
+
+#: includes/widgets/Player.php:168
+msgid "Current Time"
+msgstr ""
+
 #: includes/widgets/PandaButton.php:161
 msgid "Current tab"
 msgstr ""
@@ -208,6 +216,10 @@ msgstr ""
 
 #: includes/widgets/Player.php:405
 msgid "Hide controls before the play"
+msgstr ""
+
+#: includes/widgets/Player.php:170
+msgid "Hide Time"
 msgstr ""
 
 #. Author URI of the plugin
@@ -322,6 +334,10 @@ msgstr ""
 msgid "Reduce speed at % of the video"
 msgstr ""
 
+#: includes/widgets/Player.php:169
+msgid "Remaining Time"
+msgstr ""
+
 #: includes/widgets/Player.php:498
 msgid "Report bug"
 msgstr ""
@@ -418,6 +434,10 @@ msgstr ""
 
 #: includes/widgets/Player.php:490
 msgid "Thumbnail in the end of video"
+msgstr ""
+
+#: includes/widgets/Player.php:163
+msgid "Time display"
 msgstr ""
 
 #: includes/widgets/Player.php:234

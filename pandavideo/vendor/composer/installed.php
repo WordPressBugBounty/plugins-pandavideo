@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'pandavideo/elementor-plugin',
-        'pretty_version' => '1.4.1',
-        'version' => '1.4.1.0',
-        'reference' => 'd6fe7ef6b7ededf6a8d1251e6541cb982995e0c3',
+        'pretty_version' => '1.5.0',
+        'version' => '1.5.0.0',
+        'reference' => '370afee26962ed0c48f91e17016a8e4f0af60a1c',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'pandavideo/elementor-plugin' => array(
-            'pretty_version' => '1.4.1',
-            'version' => '1.4.1.0',
-            'reference' => 'd6fe7ef6b7ededf6a8d1251e6541cb982995e0c3',
+            'pretty_version' => '1.5.0',
+            'version' => '1.5.0.0',
+            'reference' => '370afee26962ed0c48f91e17016a8e4f0af60a1c',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
